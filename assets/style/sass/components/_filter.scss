@@ -1,0 +1,108 @@
+.filter {
+    margin-right: 20px;
+    &__header {
+        &--input-wrapper {
+            position: relative;
+            width: fit-content;
+            height: fit-content;
+
+            &::after {
+                content: '';
+                position: absolute;
+                right: 30px;
+                top: 50px;
+                background-image: url('../../../../assets/images/chevron.svg');
+                background-size: cover;
+                background-repeat: no-repeat;
+                height: 10px;
+                width: 16px;
+                transform: none;
+                transition: transform 0.2s ease-in-out;
+            }
+        }
+
+        input[type="text"] {
+
+            color: $white;
+            width: 150px;
+            border-radius: 5px;
+
+            &:focus,
+            &:active,
+            &:focus-visible {
+                outline: none;
+            }
+
+            &::placeholder {
+                color: $white;
+            }
+        }
+    }
+
+    &__body {
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.4s ease-in-out;
+        border-radius: 5px;
+        margin-top: -5px;
+        li {
+            padding: 5px 20px;
+        }
+    }
+
+    &.open {
+        .filter {
+            &__header {
+                &--input-wrapper::after {
+                    transform: rotate(180deg);
+                }
+            }
+
+            &__body {
+                max-height: 230px;
+            }
+        }
+    }
+
+    &--blue {
+        input[type="text"] {
+            background-color: $color-001;
+        }
+
+        .filter__body {
+            background-color: $color-001;
+
+            li {
+                color: $white;
+            }
+        }
+    }
+
+    &--green {
+        input[type="text"] {
+            background-color: $color-002;
+        }
+
+        .filter__body {
+            background-color: $color-002;
+
+            li {
+                color: $white;
+            }
+        }
+    }
+
+    &--red {
+        input[type="text"] {
+            background-color: $color-003;
+        }
+
+        .filter__body {
+            background-color: $color-003;
+
+            li {
+                color: $white;
+            }
+        }
+    }
+}

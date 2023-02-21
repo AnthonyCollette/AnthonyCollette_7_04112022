@@ -1,0 +1,27 @@
+main {
+    .main-input {
+        width: 100%;
+        position: relative;
+        margin-top: 15px;
+        input[type="text"] {
+            border-radius: 5px;
+            margin-top: 0;
+        }
+        svg {
+            position: absolute;
+            right: -20px;
+            top: 17px;
+            cursor: pointer;
+        }
+    }
+}
+
+.filters {
+    display: flex;
+    align-items: flex-start;
+    margin: 0 auto 0 0;
+}
+
+.selected-filters {
+    margin: 25px auto 0 0;
+}

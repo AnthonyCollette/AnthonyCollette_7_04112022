@@ -1,0 +1,38 @@
+.selected-filters__item {
+    background-color: $color-001;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid $color-001;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $white;
+
+        p {
+            color: $color-001;
+        }
+
+        svg {
+            path {
+                fill: $color-001;
+            }
+        }
+    }
+
+    p {
+        color: $white;
+        font-size: 14px;
+        font-family: $font-001;
+        margin-right: 13px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    svg {
+        path {
+            transition: all 0.2s ease-in-out;
+        }
+    }
+}
