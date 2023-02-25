@@ -52,6 +52,10 @@ table {
   border-spacing: 0;
 }
 
+* {
+  font-family: "Lato Regular";
+}
+
 main {
   display: flex;
   flex-direction: column;
@@ -64,8 +68,30 @@ main {
 
 @font-face {
   font-family: "Lato Regular";
-  src: url("../fonts/Lato/Lato-Regular.ttf") format("truetype");
+  src: url("../assets/fonts/Lato/Lato-Regular.ttf") format("truetype");
 }
+@font-face {
+  font-family: "Roboto Regular";
+  src: url("../assets/fonts/Roboto/Roboto-Regular.ttf") format("truetype");
+}
+h2 {
+  font-size: 18px;
+}
+
+h3 {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+h3 svg {
+  margin-right: 7px;
+}
+
+strong {
+  font-weight: bold;
+}
+
 input[type=text] {
   width: 100%;
   height: 70px;
@@ -169,6 +195,7 @@ input[type=text] {
   border: 1px solid #3282F7;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
+  margin-right: 15px;
 }
 .selected-filters__item:hover {
   background-color: #fff;
@@ -190,10 +217,51 @@ input[type=text] {
   transition: all 0.2s ease-in-out;
 }
 
-main .main-input {
+.result {
+  width: 380px;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: #E7E7E7;
+  margin: 0 25px 25px;
+}
+.result__img-wrapper {
   width: 100%;
+  height: 180px;
+  background-color: #C7BEBE;
+}
+.result__img-wrapper img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.result__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.result__text-wrapper {
+  padding: 20px;
+}
+.result__text-wrapper p {
+  font-size: 12px;
+  font-family: "Roboto Regular";
+  width: 50%;
+}
+.result__texts {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.result__texts li {
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+main .main-input {
+  width: calc(100% - 50px);
   position: relative;
-  margin-top: 15px;
+  margin: 15px auto 0 0;
 }
 main .main-input input[type=text] {
   border-radius: 5px;
@@ -214,4 +282,13 @@ main .main-input svg {
 
 .selected-filters {
   margin: 25px auto 0 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.results {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  margin: 30px -25px 0;
 }

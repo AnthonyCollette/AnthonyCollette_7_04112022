@@ -1,16 +1,17 @@
+// UTILS
+@import './utils/variables';
+@import './utils/mixins';
+
 // BASE
 @import './base/reset';
 @import './base/base';
 @import './base/typography';
 
-// UTILS
-@import './utils/variables';
-@import './utils/mixins';
-
 // COMPONENTS
 @import './components/form';
 @import './components/filter';
 @import './components/selected-filter';
+@import './components/result';
 
 // LAYOUT
 @import './layout/homepage';

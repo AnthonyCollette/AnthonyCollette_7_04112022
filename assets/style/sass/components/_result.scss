@@ -1,0 +1,39 @@
+.result {
+    width: 380px;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: $color-004;
+    margin: 0 25px 25px;
+    &__img-wrapper {
+        width: 100%;
+        height: 180px;
+        background-color: $color-005;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    &__text-wrapper {
+        padding: 20px;
+        p {
+            font-size: 12px;
+            font-family: $font-002;
+            width: 50%;
+        }
+    }
+    &__texts {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        li {
+            font-size: 12px;
+            margin-top: 2px;
+        }
+    }
+}

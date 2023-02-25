@@ -1,8 +1,8 @@
 main {
     .main-input {
-        width: 100%;
+        width: calc(100% - 50px);
         position: relative;
-        margin-top: 15px;
+        margin: 15px auto 0 0;
         input[type="text"] {
             border-radius: 5px;
             margin-top: 0;
@@ -24,4 +24,13 @@ main {
 
 .selected-filters {
     margin: 25px auto 0 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.results {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    margin: 30px -25px 0;
 }
