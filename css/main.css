@@ -1,3 +1,11 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -187,24 +195,52 @@ input[type=text] {
 }
 
 .selected-filters__item {
-  background-color: #3282F7;
   display: flex;
   align-items: center;
   padding: 10px 20px;
   border-radius: 5px;
-  border: 1px solid #3282F7;
-  transition: all 0.2s ease-in-out;
+  animation: fadeIn 0.4s forwards;
   cursor: pointer;
   margin-right: 15px;
 }
-.selected-filters__item:hover {
+.selected-filters__item--blue {
+  border: 1px solid #3282F7;
+  background-color: #3282F7;
+}
+.selected-filters__item--blue:hover {
   background-color: #fff;
 }
-.selected-filters__item:hover p {
+.selected-filters__item--blue:hover p {
   color: #3282F7;
 }
-.selected-filters__item:hover svg path {
+.selected-filters__item--blue:hover svg path {
   fill: #3282F7;
+}
+.selected-filters__item--green {
+  border: 1px solid #68D9A4;
+  background-color: #68D9A4;
+}
+.selected-filters__item--green:hover {
+  background-color: #fff;
+}
+.selected-filters__item--green:hover p {
+  color: #68D9A4;
+}
+.selected-filters__item--green:hover svg path {
+  fill: #68D9A4;
+}
+.selected-filters__item--red {
+  border: 1px solid #ED6454;
+  background-color: #ED6454;
+}
+.selected-filters__item--red:hover {
+  background-color: #fff;
+}
+.selected-filters__item--red:hover p {
+  color: #ED6454;
+}
+.selected-filters__item--red:hover svg path {
+  fill: #ED6454;
 }
 .selected-filters__item p {
   color: #fff;

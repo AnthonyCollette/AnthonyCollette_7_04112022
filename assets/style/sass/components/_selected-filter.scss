@@ -1,24 +1,65 @@
 .selected-filters__item {
-    background-color: $color-001;
     display: flex;
     align-items: center;
     padding: 10px 20px;
     border-radius: 5px;
-    border: 1px solid $color-001;
-    transition: all 0.2s ease-in-out;
+    animation: fadeIn 0.4s forwards;
     cursor: pointer;
     margin-right: 15px;
 
-    &:hover {
-        background-color: $white;
+    &--blue {
+        border: 1px solid $color-001;
+        background-color: $color-001;
 
-        p {
-            color: $color-001;
+        &:hover {
+            background-color: $white;
+    
+            p {
+                color: $color-001;
+            }
+    
+            svg {
+                path {
+                    fill: $color-001;
+                }
+            }
         }
+    }
 
-        svg {
-            path {
-                fill: $color-001;
+    &--green {
+        border: 1px solid $color-002;
+        background-color: $color-002;
+
+        &:hover {
+            background-color: $white;
+    
+            p {
+                color: $color-002;
+            }
+    
+            svg {
+                path {
+                    fill: $color-002;
+                }
+            }
+        }
+    }
+
+    &--red {
+        border: 1px solid $color-003;
+        background-color: $color-003;
+
+        &:hover {
+            background-color: $white;
+    
+            p {
+                color: $color-003;
+            }
+    
+            svg {
+                path {
+                    fill: $color-003;
+                }
             }
         }
     }

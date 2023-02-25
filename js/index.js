@@ -5,6 +5,8 @@ const search = searchFactory()
 let filters = document.getElementsByClassName('filter')
 let resultsSection = document.getElementById('results')
 let searchIngredients = document.getElementById('form-ingredients')
+let searchAppareils = document.getElementById('form-appareils')
+let searchUstensiles = document.getElementById('form-ustensiles')
 
 // Toggle filters
 for (let i = 0; i < filters.length; i++) {
@@ -54,9 +56,16 @@ for (let recipe of recipes) {
 // Search by filter
 searchIngredients.addEventListener('submit', (e) => {
     e.preventDefault()
-    search.addFilter()
+    search.addFilter("ingredient")
     searchIngredients.reset()
 })
-
-// Remove filter
-search.removeFilter()
+searchAppareils.addEventListener('submit', (e) => {
+    e.preventDefault()
+    search.addFilter("appareil")
+    searchAppareils.reset()
+})
+searchUstensiles.addEventListener('submit', (e) => {
+    e.preventDefault()
+    search.addFilter("ustensile")
+    searchUstensiles.reset()
+})
