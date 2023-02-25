@@ -1,12 +1,53 @@
-export function searchFactory() {
+export function searchFactory(recipes) {
 
     let selectedFilters = document.getElementsByClassName('selected-filters__item')
+    let resultsSection = document.getElementById('results')
+    let recipesToDisplay = []
+    let allFilters = []
+    let mainInput = document.getElementById('main-input')
+    let ingredientsInput = document.getElementById('ingredients-input')
+
+    // function searchByName() {
+    //     let mainForm = document.getElementById('searchbyname')
+    //     let mainInput = document.getElementById('main-input')
+
+    //     mainForm.addEventListener('submit', (e) => {
+    //         e.preventDefault()
+    //         recipesToDisplay = recipes.filter(recipe => recipe.name.toLowerCase().includes(mainInput.value.toLowerCase()))
+    //         displayRecipes()
+    //     })
+    // }
+
+    function sortRecipes(sortBy) {
+        switch (sortBy) {
+            case "name":
+                recipesToDisplay = recipes.filter(recipe => recipe.name.toLowerCase().includes(mainInput.value.toLowerCase()))
+                break;
+        
+            case "ingredient":
+                allFilters.push(ingredientsInput.value.toLowerCase())
+
+                recipesToDisplay = recipes.filter(recipe => {
+                    for (let i = 0; i < recipe.ingredients.length; i++) {
+                        checkRecipe(ingredientsInput.value.toLowerCase())
+                        // checkRecipe(recipe.ingredients[i].ingredient)
+                    }
+                })
+
+                // recipesToDisplay = recipes.filter(recipe => recipe.ingredients.toLowerCase().includes(ingredientsInput.value.toLowerCase()))
+                break;
+            
+            default:
+                recipesToDisplay = recipes
+                break;
+        }
+        displayRecipes()
+    }
 
     function addFilter(type) {
         let selectedFiltersSection = document.getElementById('selected-filters')
         switch (type) {
             case "ingredient":
-                let ingredientsInput = document.getElementById('ingredients-input')
                 selectedFiltersSection.innerHTML += `
                     <article class="selected-filters__item selected-filters__item--blue">
                         <p>${ingredientsInput.value}</p>
@@ -62,10 +103,101 @@ export function searchFactory() {
         selectedFilters = document.getElementsByClassName('selected-filters__item')
     }
 
+    function displayAllRecipes() {
+        for (let recipe of recipes) {
+            resultsSection.innerHTML += `
+            <div class="result">
+                <div class="result__img-wrapper">
+                    <img src="" alt="">
+                </div>
+                <div class="result__text-wrapper">
+                    <div class="result__header">
+                        <h2>${recipe.name}</h2>
+                        <h3><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 0C4.5 0 0 4.5 0 10C0 15.5 4.5 20 10 20C15.5 20 20 15.5 20 10C20 4.5 15.5 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18ZM10.5 5H9V11L14.2 14.2L15 12.9L10.5 10.2V5Z" fill="black"/>
+                        </svg>
+                         ${recipe.time}min</h3>
+                    </div>
+                    <div class="result__texts">
+                        <ul class="ingredients" id="ingredients-${recipe.id}"></ul>
+                        <p>${recipe.description}</p>
+                    </div>
+                </div>
+            </div>
+            `
+            let ingredientsList = document.getElementById(`ingredients-${recipe.id}`)
+            for (let ingredient of recipe.ingredients) {
+                let unit = ingredient.unit ? ingredient.unit : ''
+                if (unit.length > 2) {
+                    unit = ' ' + unit
+                }
+                let quantity = ingredient.quantity ? ingredient.quantity : ''
+                let doublePoints = ingredient.quantity ? ':' : ''
+                ingredientsList.innerHTML += `
+                    <li><strong>${ingredient.ingredient}${doublePoints}</strong> ${quantity}${unit}</li>
+                `
+            }
+        }
+    }
+
+    function displayRecipes() {
+        resultsSection.innerHTML = ""
+        for (let recipe of recipesToDisplay) {
+            resultsSection.innerHTML += `
+            <div class="result">
+                <div class="result__img-wrapper">
+                    <img src="" alt="">
+                </div>
+                <div class="result__text-wrapper">
+                    <div class="result__header">
+                        <h2>${recipe.name}</h2>
+                        <h3><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 0C4.5 0 0 4.5 0 10C0 15.5 4.5 20 10 20C15.5 20 20 15.5 20 10C20 4.5 15.5 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18ZM10.5 5H9V11L14.2 14.2L15 12.9L10.5 10.2V5Z" fill="black"/>
+                        </svg>
+                         ${recipe.time}min</h3>
+                    </div>
+                    <div class="result__texts">
+                        <ul class="ingredients" id="ingredients-${recipe.id}"></ul>
+                        <p>${recipe.description}</p>
+                    </div>
+                </div>
+            </div>
+            `
+            let ingredientsList = document.getElementById(`ingredients-${recipe.id}`)
+            for (let ingredient of recipe.ingredients) {
+                let unit = ingredient.unit ? ingredient.unit : ''
+                if (unit.length > 2) {
+                    unit = ' ' + unit
+                }
+                let quantity = ingredient.quantity ? ingredient.quantity : ''
+                let doublePoints = ingredient.quantity ? ':' : ''
+                ingredientsList.innerHTML += `
+                    <li><strong>${ingredient.ingredient}${doublePoints}</strong> ${quantity}${unit}</li>
+                `
+            }
+        }
+    }
+
+    function checkRecipe(recipe) {
+        allFilters.forEach(filter => {
+            for (let i = 0; i < filter.length; i++) {
+                if (recipe.toLowerCase().includes(filter[i].toLowerCase())) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        })
+    }
+
     return {
         selectedFilters,
         addFilter,
         removeFilter,
-        refreshSelectedFilters
+        refreshSelectedFilters,
+        displayAllRecipes,
+        displayRecipes,
+        sortRecipes,
+        checkRecipe
 	}
 }

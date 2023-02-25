@@ -259,6 +259,7 @@ input[type=text] {
   overflow: hidden;
   background-color: #E7E7E7;
   margin: 0 25px 25px;
+  animation: fadeIn 0.4s forwards;
 }
 .result__img-wrapper {
   width: 100%;
