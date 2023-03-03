@@ -4,6 +4,9 @@ export function searchFactory(recipes) {
     let resultsSection = document.getElementById('results')
     let recipesToDisplay = []
     let allFilters = []
+    let allIngredients = []
+    let allAppliances = []
+    let allUstensils = []
     let mainInput = document.getElementById('main-input')
     let ingredientsInput = document.getElementById('ingredients-input')
 
@@ -26,22 +29,20 @@ export function searchFactory(recipes) {
         
             case "ingredient":
                 allFilters.push(ingredientsInput.value.toLowerCase())
-
                 recipesToDisplay = recipes.filter(recipe => {
-                    for (let i = 0; i < recipe.ingredients.length; i++) {
-                        checkRecipe(ingredientsInput.value.toLowerCase())
-                        // checkRecipe(recipe.ingredients[i].ingredient)
+                    let ingredientsList = []
+                    for (let list of recipe.ingredients) {
+                        let ingredient = list.ingredient.toLowerCase()
+                        ingredientsList.push(ingredient)
                     }
                 })
-
-                // recipesToDisplay = recipes.filter(recipe => recipe.ingredients.toLowerCase().includes(ingredientsInput.value.toLowerCase()))
+                console.log(recipesToDisplay)
                 break;
             
             default:
                 recipesToDisplay = recipes
                 break;
         }
-        displayRecipes()
     }
 
     function addFilter(type) {
@@ -178,15 +179,63 @@ export function searchFactory(recipes) {
         }
     }
 
-    function checkRecipe(recipe) {
-        allFilters.forEach(filter => {
-            for (let i = 0; i < filter.length; i++) {
-                if (recipe.toLowerCase().includes(filter[i].toLowerCase())) {
-                    return true;
-                } else {
-                    return false;
+    function getAllIngredients() {
+        for (let recipe of recipes) {
+            for (let i = 0; i < recipe.ingredients.length; i++) {
+                let ingredient = recipe.ingredients[i].ingredient
+                if (!allIngredients.includes(ingredient)) {
+                    allIngredients.push(ingredient)
                 }
             }
+        }
+    }
+
+    function getAllAppliances() {
+        for (let recipe of recipes) {
+            for (let i = 0; i < recipe.appliance.length; i++) {
+                let appliance = recipe.appliance
+                if (!allAppliances.includes(appliance)) {
+                    allAppliances.push(appliance)
+                }
+            }
+        }
+    }
+
+    function getAllUstensils() {
+        for (let recipe of recipes) {
+            for (let i = 0; i < recipe.ustensils.length; i++) {
+                let ustensil = recipe.ustensils[i]
+                if (!allUstensils.includes(ustensil)) {
+                    allUstensils.push(ustensil)
+                }
+            }
+        }
+    }
+
+    function displayAllIngredients() {
+        let ingredientsListDiv = document.getElementById('ingredients-list')
+        allIngredients.forEach(item => {
+            ingredientsListDiv.innerHTML += `
+                <li>${item}</li>
+            `
+        })
+    }
+
+    function displayAllAppliances() {
+        let appliancesListDiv = document.getElementById('appliances-list')
+        allAppliances.forEach(item => {
+            appliancesListDiv.innerHTML += `
+                <li>${item}</li>
+            `
+        })
+    }
+
+    function displayAllUstensils() {
+        let ustensilsListDiv = document.getElementById('ustensils-list')
+        allUstensils.forEach(item => {
+            ustensilsListDiv.innerHTML += `
+                <li>${item}</li>
+            `
         })
     }
 
@@ -198,6 +247,11 @@ export function searchFactory(recipes) {
         displayAllRecipes,
         displayRecipes,
         sortRecipes,
-        checkRecipe
+        getAllIngredients,
+        displayAllIngredients,
+        getAllAppliances,
+        displayAllAppliances,
+        getAllUstensils,
+        displayAllUstensils
 	}
 }

@@ -1,30 +1,17 @@
 .filter {
     margin-right: 20px;
     &__header {
+        position: relative;
         &--input-wrapper {
             position: relative;
-            width: fit-content;
             height: fit-content;
-
-            &::after {
-                content: '';
-                position: absolute;
-                right: 30px;
-                top: 50px;
-                background-image: url('../../../../assets/images/chevron.svg');
-                background-size: cover;
-                background-repeat: no-repeat;
-                height: 10px;
-                width: 16px;
-                transform: none;
-                transition: transform 0.2s ease-in-out;
-            }
         }
 
         input[type="text"] {
 
             color: $white;
-            width: 150px;
+            min-width: 150px;
+            width: calc(100% - 60px);
             border-radius: 5px;
 
             &:focus,
@@ -37,29 +24,72 @@
                 color: $white;
             }
         }
+        .btn-wrapper {
+            position: absolute;
+            right: 25px;
+            top: 50px;
+            cursor: pointer;
+            &::after {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 0;
+                background-image: url('../../../../assets/images/chevron.svg');
+                background-size: cover;
+                background-repeat: no-repeat;
+                height: 10px;
+                width: 16px;
+                transform: none;
+                transition: transform 0.2s ease-in-out;
+            }
+        }
+        button {
+            height: 10px;
+            width: 16px;
+            background-color: transparent;
+            border: none;
+        }
     }
 
     &__body {
         max-height: 0;
-        overflow: hidden;
+        width: 0;
+        overflow-y: auto;
         transition: all 0.4s ease-in-out;
         border-radius: 5px;
         margin-top: -5px;
+        ul {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px 50px;
+        }
         li {
             padding: 5px 20px;
+            cursor: pointer;
         }
     }
 
     &.open {
         .filter {
             &__header {
-                &--input-wrapper::after {
+                .btn-wrapper::after {
                     transform: rotate(180deg);
                 }
             }
 
             &__body {
-                max-height: 230px;
+                max-height: 315px;
+                width: calc(100% - 10px);
+                position: relative;
+                ul {
+                    padding: 15px 0;
+                }
+                li {
+                    transition: color 0.2s ease-in-out;
+                    &:hover {
+                        color: rgba($color: $white, $alpha: 0.5);
+                }
+            }
             }
         }
     }

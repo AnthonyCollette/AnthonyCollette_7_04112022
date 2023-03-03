@@ -116,29 +116,18 @@ input[type=text] {
 .filter {
   margin-right: 20px;
 }
+.filter__header {
+  position: relative;
+}
 .filter__header--input-wrapper {
   position: relative;
-  width: -moz-fit-content;
-  width: fit-content;
   height: -moz-fit-content;
   height: fit-content;
 }
-.filter__header--input-wrapper::after {
-  content: "";
-  position: absolute;
-  right: 30px;
-  top: 50px;
-  background-image: url("../../../../assets/images/chevron.svg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  height: 10px;
-  width: 16px;
-  transform: none;
-  transition: transform 0.2s ease-in-out;
-}
 .filter__header input[type=text] {
   color: #fff;
-  width: 150px;
+  min-width: 150px;
+  width: calc(100% - 60px);
   border-radius: 5px;
 }
 .filter__header input[type=text]:focus, .filter__header input[type=text]:active, .filter__header input[type=text]:focus-visible {
@@ -150,21 +139,64 @@ input[type=text] {
 .filter__header input[type=text]::placeholder {
   color: #fff;
 }
+.filter__header .btn-wrapper {
+  position: absolute;
+  right: 25px;
+  top: 50px;
+  cursor: pointer;
+}
+.filter__header .btn-wrapper::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-image: url("../../../../assets/images/chevron.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 10px;
+  width: 16px;
+  transform: none;
+  transition: transform 0.2s ease-in-out;
+}
+.filter__header button {
+  height: 10px;
+  width: 16px;
+  background-color: transparent;
+  border: none;
+}
 .filter__body {
   max-height: 0;
-  overflow: hidden;
+  width: 0;
+  overflow-y: auto;
   transition: all 0.4s ease-in-out;
   border-radius: 5px;
   margin-top: -5px;
 }
+.filter__body ul {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px 50px;
+}
 .filter__body li {
   padding: 5px 20px;
+  cursor: pointer;
 }
-.filter.open .filter__header--input-wrapper::after {
+.filter.open .filter__header .btn-wrapper::after {
   transform: rotate(180deg);
 }
 .filter.open .filter__body {
-  max-height: 230px;
+  max-height: 315px;
+  width: calc(100% - 10px);
+  position: relative;
+}
+.filter.open .filter__body ul {
+  padding: 15px 0;
+}
+.filter.open .filter__body li {
+  transition: color 0.2s ease-in-out;
+}
+.filter.open .filter__body li:hover {
+  color: rgba(255, 255, 255, 0.5);
 }
 .filter--blue input[type=text] {
   background-color: #3282F7;
