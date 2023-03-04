@@ -115,6 +115,7 @@ input[type=text] {
 
 .filter {
   margin-right: 20px;
+  position: relative;
 }
 .filter__header {
   position: relative;
@@ -181,13 +182,18 @@ input[type=text] {
   padding: 5px 20px;
   cursor: pointer;
 }
+.filter.open {
+  width: 680px;
+}
 .filter.open .filter__header .btn-wrapper::after {
   transform: rotate(180deg);
 }
 .filter.open .filter__body {
   max-height: 315px;
-  width: calc(100% - 10px);
-  position: relative;
+  width: 670px;
+  position: absolute;
+  top: 100%;
+  z-index: 10;
 }
 .filter.open .filter__body ul {
   padding: 15px 0;

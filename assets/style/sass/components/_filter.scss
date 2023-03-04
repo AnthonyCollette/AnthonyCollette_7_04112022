@@ -1,5 +1,6 @@
 .filter {
     margin-right: 20px;
+    position: relative;
     &__header {
         position: relative;
         &--input-wrapper {
@@ -70,6 +71,7 @@
     }
 
     &.open {
+        width: 680px;
         .filter {
             &__header {
                 .btn-wrapper::after {
@@ -79,8 +81,10 @@
 
             &__body {
                 max-height: 315px;
-                width: calc(100% - 10px);
-                position: relative;
+                width: 670px;
+                position: absolute;
+                top: 100%;
+                z-index: 10;
                 ul {
                     padding: 15px 0;
                 }

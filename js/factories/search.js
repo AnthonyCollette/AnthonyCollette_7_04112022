@@ -9,6 +9,12 @@ export function searchFactory(recipes) {
     let allUstensils = []
     let mainInput = document.getElementById('main-input')
     let ingredientsInput = document.getElementById('ingredients-input')
+    let filteredIngredients = []
+    let filteredAppliances = []
+    let filteredUstenstils = []
+    let ingredientsListDiv = document.getElementById('ingredients-list')
+    let appliancesListDiv = document.getElementById('appliances-list')
+    let ustensilsListDiv = document.getElementById('ustensils-list')
 
     // function searchByName() {
     //     let mainForm = document.getElementById('searchbyname')
@@ -213,7 +219,6 @@ export function searchFactory(recipes) {
     }
 
     function displayAllIngredients() {
-        let ingredientsListDiv = document.getElementById('ingredients-list')
         allIngredients.forEach(item => {
             ingredientsListDiv.innerHTML += `
                 <li>${item}</li>
@@ -222,7 +227,6 @@ export function searchFactory(recipes) {
     }
 
     function displayAllAppliances() {
-        let appliancesListDiv = document.getElementById('appliances-list')
         allAppliances.forEach(item => {
             appliancesListDiv.innerHTML += `
                 <li>${item}</li>
@@ -231,12 +235,61 @@ export function searchFactory(recipes) {
     }
 
     function displayAllUstensils() {
-        let ustensilsListDiv = document.getElementById('ustensils-list')
         allUstensils.forEach(item => {
             ustensilsListDiv.innerHTML += `
                 <li>${item}</li>
             `
         })
+    }
+
+    function displayFilteredIngredients() {
+        ingredientsListDiv.innerHTML = ''
+        for (let item of filteredIngredients) {
+            ingredientsListDiv.innerHTML += `
+            <li>${item}</li>
+        `
+        }
+    }
+
+    function displayFilteredAppliances() {
+        appliancesListDiv.innerHTML = ''
+        for (let item of filteredAppliances) {
+            appliancesListDiv.innerHTML += `
+            <li>${item}</li>
+        `
+        }
+    }
+
+    function displayFilteredUstensils() {
+        ustensilsListDiv.innerHTML = ''
+        for (let item of filteredUstenstils) {
+            ustensilsListDiv.innerHTML += `
+            <li>${item}</li>
+        `
+        }
+    }
+
+    function searchFilters(type, value) {
+        switch (type) {
+            case 'ingredients':
+                filteredIngredients = allIngredients.filter(ingredient => ingredient.toLowerCase().includes(value))
+                displayFilteredIngredients()
+                break;
+            
+            case 'appliances':
+                filteredAppliances = allAppliances.filter(appliance => appliance.toLowerCase().includes(value))
+                displayFilteredAppliances()
+                break;
+
+            case 'ustensils':
+                filteredUstenstils = allUstensils.filter(ustensil => ustensil.toLowerCase().includes(value))
+                displayFilteredUstensils()
+                break;
+        
+            default:
+                getAllIngredients()
+                break;
+        }
     }
 
     return {
@@ -252,6 +305,10 @@ export function searchFactory(recipes) {
         getAllAppliances,
         displayAllAppliances,
         getAllUstensils,
-        displayAllUstensils
+        displayAllUstensils,
+        displayFilteredIngredients,
+        displayFilteredAppliances,
+        displayFilteredUstensils,
+        searchFilters,
 	}
 }

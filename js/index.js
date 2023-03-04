@@ -8,6 +8,9 @@ let searchIngredients = document.getElementById('form-ingredients')
 let searchAppareils = document.getElementById('form-appareils')
 let searchUstensiles = document.getElementById('form-ustensiles')
 let mainForm = document.getElementById('searchbyname')
+let ingredientsInput = document.getElementById('ingredients-input')
+let appliancesInput = document.getElementById('appareils-input')
+let ustensilsInput = document.getElementById('ustensiles-input')
 
 // Toggle filtersBtn
 for (let i = 0; i < filtersBtn.length; i++) {
@@ -55,4 +58,15 @@ document.addEventListener('DOMContentLoaded', () => {
 	search.displayAllIngredients()
 	search.displayAllAppliances()
 	search.displayAllUstensils()
+})
+
+// Search Filters
+ingredientsInput.addEventListener('input', () => {
+	search.searchFilters('ingredients', ingredientsInput.value.toLowerCase())
+})
+appliancesInput.addEventListener('input', () => {
+	search.searchFilters('appliances', appliancesInput.value.toLowerCase())
+})
+ustensilsInput.addEventListener('input', () => {
+	search.searchFilters('ustensils', ustensilsInput.value.toLowerCase())
 })
