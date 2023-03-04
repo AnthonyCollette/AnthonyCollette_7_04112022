@@ -27,18 +27,17 @@ search.displayAllRecipes()
 // Search by filter
 searchIngredients.addEventListener('submit', (e) => {
 	e.preventDefault()
-	search.addFilter('ingredient')
-	search.sortRecipes('ingredient')
+	search.addFilterBySubmit('ingredient')
 	searchIngredients.reset()
 })
 searchAppareils.addEventListener('submit', (e) => {
 	e.preventDefault()
-	search.addFilter('appareil')
+	search.addFilterBySubmit('appareil')
 	searchAppareils.reset()
 })
 searchUstensiles.addEventListener('submit', (e) => {
 	e.preventDefault()
-	search.addFilter('ustensile')
+	search.addFilterBySubmit('ustensile')
 	searchUstensiles.reset()
 })
 
@@ -69,4 +68,13 @@ appliancesInput.addEventListener('input', () => {
 })
 ustensilsInput.addEventListener('input', () => {
 	search.searchFilters('ustensils', ustensilsInput.value.toLowerCase())
+})
+
+document.addEventListener('DOMContentLoaded', () => {
+	let filtersNames = document.getElementsByClassName('filter-name')
+	for (let filterName of filtersNames) {
+		filterName.addEventListener('click', () => {
+			search.addFilterByClick(filterName.textContent, filterName.getAttribute('data-type'))
+		})
+	}
 })

@@ -2,58 +2,50 @@ export function searchFactory(recipes) {
 
     let selectedFilters = document.getElementsByClassName('selected-filters__item')
     let resultsSection = document.getElementById('results')
-    let recipesToDisplay = []
-    let allFilters = []
-    let allIngredients = []
-    let allAppliances = []
-    let allUstensils = []
-    let mainInput = document.getElementById('main-input')
-    let ingredientsInput = document.getElementById('ingredients-input')
-    let filteredIngredients = []
-    let filteredAppliances = []
-    let filteredUstenstils = []
+    let selectedFiltersSection = document.getElementById('selected-filters')
     let ingredientsListDiv = document.getElementById('ingredients-list')
     let appliancesListDiv = document.getElementById('appliances-list')
     let ustensilsListDiv = document.getElementById('ustensils-list')
+    let mainInput = document.getElementById('main-input')
+    let ingredientsInput = document.getElementById('ingredients-input')
+    let appareilsInput = document.getElementById('appareils-input')
+    let ustensilesInput = document.getElementById('ustensiles-input')
+    let recipesToDisplay = []
+    let allIngredients = []
+    let allAppliances = []
+    let allUstensils = []
+    let filteredIngredients = []
+    let filteredAppliances = []
+    let filteredUstenstils = []
 
-    // function searchByName() {
-    //     let mainForm = document.getElementById('searchbyname')
-    //     let mainInput = document.getElementById('main-input')
-
-    //     mainForm.addEventListener('submit', (e) => {
-    //         e.preventDefault()
-    //         recipesToDisplay = recipes.filter(recipe => recipe.name.toLowerCase().includes(mainInput.value.toLowerCase()))
-    //         displayRecipes()
-    //     })
-    // }
-
-    function sortRecipes(sortBy) {
-        switch (sortBy) {
-            case "name":
-                recipesToDisplay = recipes.filter(recipe => recipe.name.toLowerCase().includes(mainInput.value.toLowerCase()))
-                break;
-        
-            case "ingredient":
-                allFilters.push(ingredientsInput.value.toLowerCase())
-                recipesToDisplay = recipes.filter(recipe => {
-                    let ingredientsList = []
-                    for (let list of recipe.ingredients) {
-                        let ingredient = list.ingredient.toLowerCase()
-                        ingredientsList.push(ingredient)
-                    }
-                })
-                console.log(recipesToDisplay)
-                break;
-            
-            default:
-                recipesToDisplay = recipes
-                break;
+    function sortRecipes(sortBy, value) {
+        if (recipesToDisplay.length < 1) {
+            recipesToDisplay = recipes
         }
+        if (sortBy === 'name') {
+            recipesToDisplay = recipes
+            recipesToDisplay = recipesToDisplay.filter(recipe => recipe.name.toLowerCase().includes(mainInput.value.toLowerCase()))
+        }
+        if (sortBy === 'ingredient') {
+            recipesToDisplay = recipesToDisplay.filter(recipe => {
+                let listOfIngredients = []
+                for (let list of recipe.ingredients) {
+                    listOfIngredients.push(list.ingredient.toLowerCase())
+                }
+                for (let item of listOfIngredients) {
+                    if (item.includes(value)) {
+                        return recipe
+                    }
+                    
+                }
+            })
+        }
+        displayRecipes()
+
     }
 
-    function addFilter(type) {
-        let selectedFiltersSection = document.getElementById('selected-filters')
-        switch (type) {
+    function addFilterBySubmit(type) {
+       switch (type) {
             case "ingredient":
                 selectedFiltersSection.innerHTML += `
                     <article class="selected-filters__item selected-filters__item--blue">
@@ -63,10 +55,10 @@ export function searchFactory(recipes) {
                         </svg>
                     </article>
                     `
+                sortRecipes("ingredient", ingredientsInput.value)
                 break;
             
             case "appareil":
-                let appareilsInput = document.getElementById('appareils-input')
                 selectedFiltersSection.innerHTML += `
                     <article class="selected-filters__item selected-filters__item--green">
                         <p>${appareilsInput.value}</p>
@@ -78,7 +70,6 @@ export function searchFactory(recipes) {
                 break;
             
             case "ustensile":
-                let ustensilesInput = document.getElementById('ustensiles-input')
                 selectedFiltersSection.innerHTML += `
                     <article class="selected-filters__item selected-filters__item--red">
                         <p>${ustensilesInput.value}</p>
@@ -94,7 +85,49 @@ export function searchFactory(recipes) {
         }
         refreshSelectedFilters()
         removeFilter()
-	}
+    }
+    
+    function addFilterByClick(filter, type) {
+        switch (type) {
+            case "ingredient":
+                selectedFiltersSection.innerHTML += `
+                    <article class="selected-filters__item selected-filters__item--blue">
+                        <p>${filter}</p>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z" fill="white"/>
+                        </svg>
+                    </article>
+                    `
+                break;
+            
+            case "appareil":
+                selectedFiltersSection.innerHTML += `
+                    <article class="selected-filters__item selected-filters__item--green">
+                        <p>${filter}</p>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z" fill="white"/>
+                        </svg>
+                    </article>
+                    `
+                break;
+            
+            case "ustensile":
+                selectedFiltersSection.innerHTML += `
+                    <article class="selected-filters__item selected-filters__item--red">
+                        <p>${filter}</p>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z" fill="white"/>
+                        </svg>
+                    </article>
+                    `
+                break;
+        
+            default:
+                break;
+        }
+        refreshSelectedFilters()
+        removeFilter()
+    }
 
     function removeFilter() {
         for (let filter of selectedFilters) {
@@ -221,7 +254,7 @@ export function searchFactory(recipes) {
     function displayAllIngredients() {
         allIngredients.forEach(item => {
             ingredientsListDiv.innerHTML += `
-                <li>${item}</li>
+                <li data-type="ingredient" class="filter-name">${item}</li>
             `
         })
     }
@@ -229,7 +262,7 @@ export function searchFactory(recipes) {
     function displayAllAppliances() {
         allAppliances.forEach(item => {
             appliancesListDiv.innerHTML += `
-                <li>${item}</li>
+                <li data-type="appareil" class="filter-name">${item}</li>
             `
         })
     }
@@ -237,7 +270,7 @@ export function searchFactory(recipes) {
     function displayAllUstensils() {
         allUstensils.forEach(item => {
             ustensilsListDiv.innerHTML += `
-                <li>${item}</li>
+                <li data-type="ustensile" class="filter-name">${item}</li>
             `
         })
     }
@@ -294,7 +327,8 @@ export function searchFactory(recipes) {
 
     return {
         selectedFilters,
-        addFilter,
+        addFilterBySubmit,
+        addFilterByClick,
         removeFilter,
         refreshSelectedFilters,
         displayAllRecipes,
