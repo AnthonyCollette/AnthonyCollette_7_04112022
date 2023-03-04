@@ -52,13 +52,6 @@ search.getAllIngredients()
 search.getAllAppliances()
 search.getAllUstensils()
 
-// Display Filters Default Content
-document.addEventListener('DOMContentLoaded', () => {
-	search.displayAllIngredients()
-	search.displayAllAppliances()
-	search.displayAllUstensils()
-})
-
 // Search Filters
 ingredientsInput.addEventListener('input', () => {
 	search.searchFilters('ingredients', ingredientsInput.value.toLowerCase())
@@ -71,6 +64,12 @@ ustensilsInput.addEventListener('input', () => {
 })
 
 document.addEventListener('DOMContentLoaded', () => {
+	// Display Filters Default Content
+	search.displayAllIngredients()
+	search.displayAllAppliances()
+	search.displayAllUstensils()
+
+
 	let filtersNames = document.getElementsByClassName('filter-name')
 	for (let filterName of filtersNames) {
 		filterName.addEventListener('click', () => {

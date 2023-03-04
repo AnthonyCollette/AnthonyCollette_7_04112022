@@ -14,53 +14,93 @@ export function searchFactory(recipes) {
     let allIngredients = []
     let allAppliances = []
     let allUstensils = []
+    let allFilters = []
     let filteredIngredients = []
     let filteredAppliances = []
     let filteredUstenstils = []
 
-    function sortRecipes(sortBy, value) {
+    function sortRecipes() {
+        for (let filter of allFilters) {
+            let filterSortBy = filter.sortBy
+            let filterValue = filter.value
+
         if (recipesToDisplay.length < 1) {
             recipesToDisplay = recipes
         }
-        if (sortBy === 'name') {
+        if (filterSortBy === 'name') {
             recipesToDisplay = recipes
-            recipesToDisplay = recipesToDisplay.filter(recipe => recipe.name.toLowerCase().includes(mainInput.value.toLowerCase()))
+            recipesToDisplay = recipesToDisplay.filter(recipe => recipe.name.toLowerCase().includes(mainInput.filterValue.toLowerCase()))
         }
-        if (sortBy === 'ingredient') {
+        if (filterSortBy === 'ingredient') {
             recipesToDisplay = recipesToDisplay.filter(recipe => {
                 let listOfIngredients = []
                 for (let list of recipe.ingredients) {
                     listOfIngredients.push(list.ingredient.toLowerCase())
                 }
                 for (let item of listOfIngredients) {
-                    if (item.includes(value)) {
+                    if (item.includes(filterValue)) {
                         return recipe
                     }
                     
                 }
             })
+            }
         }
         displayRecipes()
 
+    }
+
+    function addFilter(type, value) {
+        allFilters.push({ sortBy: type, value: value })
+        sortRecipes()
+    }
+
+    function removeFilter(type, value) {
+
+        allFilters = allFilters.filter(filter => {
+            return filter.type !== type && filter.value !== value
+        })
+        refreshSelectedFilters()
+    }
+
+    function deleteFilterByClick() {
+        for (let filter of selectedFilters) {
+            filter.addEventListener('click', (e) => {
+                let divFilter = e.target
+                if (divFilter.tagName === 'p' || divFilter.tagName === 'svg' || divFilter.tagName === 'path') {
+                    divFilter = divFilter.parentNode
+                }
+                console.log(divFilter.tagName)
+                let type = divFilter.getAttribute('data-type')
+                let value = divFilter.firstChild.textContent
+
+                console.log(type + ' ' + value)
+
+                
+                
+                filter.remove()
+                selectedFilters = document.getElementsByClassName('selected-filters__item')
+            })
+        }
     }
 
     function addFilterBySubmit(type) {
        switch (type) {
             case "ingredient":
                 selectedFiltersSection.innerHTML += `
-                    <article class="selected-filters__item selected-filters__item--blue">
+                    <article class="selected-filters__item selected-filters__item--blue" data-type="ingredient">
                         <p>${ingredientsInput.value}</p>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z" fill="white"/>
                         </svg>
                     </article>
                     `
-                sortRecipes("ingredient", ingredientsInput.value)
+                addFilter("ingredient", ingredientsInput.value)
                 break;
             
             case "appareil":
                 selectedFiltersSection.innerHTML += `
-                    <article class="selected-filters__item selected-filters__item--green">
+                    <article class="selected-filters__item selected-filters__item--green" data-type="appareil">
                         <p>${appareilsInput.value}</p>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z" fill="white"/>
@@ -71,7 +111,7 @@ export function searchFactory(recipes) {
             
             case "ustensile":
                 selectedFiltersSection.innerHTML += `
-                    <article class="selected-filters__item selected-filters__item--red">
+                    <article class="selected-filters__item selected-filters__item--red" data-type="ustensile">
                         <p>${ustensilesInput.value}</p>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z" fill="white"/>
@@ -83,6 +123,7 @@ export function searchFactory(recipes) {
             default:
                 break;
         }
+        deleteFilterByClick()
         refreshSelectedFilters()
         removeFilter()
     }
@@ -127,16 +168,6 @@ export function searchFactory(recipes) {
         }
         refreshSelectedFilters()
         removeFilter()
-    }
-
-    function removeFilter() {
-        for (let filter of selectedFilters) {
-            filter.addEventListener('click', () => {
-                filter.remove()
-                selectedFilters = document.getElementsByClassName('selected-filters__item')
-            })
-        }
-        refreshSelectedFilters()
     }
 
     function refreshSelectedFilters() {
@@ -344,5 +375,6 @@ export function searchFactory(recipes) {
         displayFilteredAppliances,
         displayFilteredUstensils,
         searchFilters,
+        deleteFilterByClick
 	}
 }
