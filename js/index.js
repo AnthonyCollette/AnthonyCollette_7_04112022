@@ -8,6 +8,7 @@ let searchIngredients = document.getElementById('form-ingredients')
 let searchAppareils = document.getElementById('form-appareils')
 let searchUstensiles = document.getElementById('form-ustensiles')
 let mainForm = document.getElementById('searchbyname')
+let mainInput = document.getElementById('main-input')
 let ingredientsInput = document.getElementById('ingredients-input')
 let appliancesInput = document.getElementById('appareils-input')
 let ustensilsInput = document.getElementById('ustensiles-input')
@@ -44,8 +45,7 @@ searchUstensiles.addEventListener('submit', (e) => {
 // Search by name
 mainForm.addEventListener('submit', (e) => {
 	e.preventDefault()
-	search.sortRecipes('name')
-	search.displayRecipes()
+	search.sortRecipes(mainInput.value === '' ? 'reset' : mainInput.value.toLowerCase())
 })
 
 search.getAllIngredients()
