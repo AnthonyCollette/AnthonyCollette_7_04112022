@@ -12,12 +12,13 @@ let mainInput = document.getElementById('main-input')
 let ingredientsInput = document.getElementById('ingredients-input')
 let appliancesInput = document.getElementById('appareils-input')
 let ustensilsInput = document.getElementById('ustensiles-input')
+let filtersNames = []
 
 // Toggle filtersBtn
 for (let i = 0; i < filtersBtn.length; i++) {
 	filtersBtn[i].addEventListener('click', () => {
 		filters[i].classList.contains('open')
-			? filters[i].classList.remove('open')
+		? filters[i].classList.remove('open')
 			: filters[i].classList.add('open')
 	})
 }
@@ -55,12 +56,30 @@ search.getAllUstensils()
 // Search Filters
 ingredientsInput.addEventListener('input', () => {
 	search.searchFilters('ingredients', ingredientsInput.value.toLowerCase())
+	filtersNames = document.getElementsByClassName('filter-name')
+	for (let filterName of filtersNames) {
+		filterName.addEventListener('click', () => {
+			search.addFilterByClick(filterName.textContent, filterName.getAttribute('data-type'))
+		})
+	}
 })
 appliancesInput.addEventListener('input', () => {
 	search.searchFilters('appliances', appliancesInput.value.toLowerCase())
+	filtersNames = document.getElementsByClassName('filter-name')
+	for (let filterName of filtersNames) {
+		filterName.addEventListener('click', () => {
+			search.addFilterByClick(filterName.textContent, filterName.getAttribute('data-type'))
+		})
+	}
 })
 ustensilsInput.addEventListener('input', () => {
 	search.searchFilters('ustensils', ustensilsInput.value.toLowerCase())
+	filtersNames = document.getElementsByClassName('filter-name')
+	for (let filterName of filtersNames) {
+		filterName.addEventListener('click', () => {
+			search.addFilterByClick(filterName.textContent, filterName.getAttribute('data-type'))
+		})
+	}
 })
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -70,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	search.displayAllUstensils()
 
 
-	let filtersNames = document.getElementsByClassName('filter-name')
+	filtersNames = document.getElementsByClassName('filter-name')
 	for (let filterName of filtersNames) {
 		filterName.addEventListener('click', () => {
 			search.addFilterByClick(filterName.textContent, filterName.getAttribute('data-type'))

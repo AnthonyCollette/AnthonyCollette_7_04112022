@@ -35,6 +35,7 @@ export function searchFactory(recipes) {
                         </svg>
                     </article>
                     `
+                addFilter('ingredient', filter.toLowerCase())
 				break
 
 			case 'appareil':
@@ -46,6 +47,7 @@ export function searchFactory(recipes) {
                         </svg>
                     </article>
                     `
+                addFilter('appareil', filter.toLowerCase())
 				break
 
 			case 'ustensile':
@@ -57,13 +59,14 @@ export function searchFactory(recipes) {
                         </svg>
                     </article>
                     `
+                addFilter('ustensile', filter.toLowerCase())
 				break
 
 			default:
 				break
 		}
+		deleteFilterByClick()
 		refreshSelectedFilters()
-		removeFilter()
 	}
 
 	function addFilterBySubmit(type) {
@@ -232,7 +235,7 @@ export function searchFactory(recipes) {
 		appliancesListDiv.innerHTML = ''
 		for (let item of filteredAppliances) {
 			appliancesListDiv.innerHTML += `
-            <li>${item}</li>
+            <li data-type="appliances" class="filter-name">${item}</li>
         `
 		}
 	}
@@ -241,7 +244,7 @@ export function searchFactory(recipes) {
 		ingredientsListDiv.innerHTML = ''
 		for (let item of filteredIngredients) {
 			ingredientsListDiv.innerHTML += `
-            <li>${item}</li>
+            <li data-type="ingredient" class="filter-name">${item}</li>
         `
 		}
 	}
@@ -250,7 +253,7 @@ export function searchFactory(recipes) {
 		ustensilsListDiv.innerHTML = ''
 		for (let item of filteredUstenstils) {
 			ustensilsListDiv.innerHTML += `
-            <li>${item}</li>
+            <li data-type="ustensils" class="filter-name">${item}</li>
         `
 		}
 	}
@@ -331,16 +334,26 @@ export function searchFactory(recipes) {
 		}
 	}
 
-	function sortRecipes(name) {
-		if (name) {
+	function sortRecipes(mainInputValue) {
+		if (mainInputValue) {
 			allFilters = []
 			selectedFiltersSection.innerHTML = ''
 			refreshSelectedFilters()
-            recipesToDisplay = recipes
-            console.log(name)
-			if (name !== 'reset') {
-				recipesToDisplay = recipesToDisplay.filter((recipe) =>
-					recipe.name.toLowerCase().includes(name)
+			recipesToDisplay = recipes
+			if (mainInputValue !== 'reset') {
+				recipesToDisplay = recipesToDisplay.filter((recipe) => {
+					let ingredientsOfRecipe = []
+					let ustensilsOfRecipe = []
+					for (let item of recipe.ingredients) {
+						ingredientsOfRecipe.push(item.ingredient.toLowerCase())
+					}
+					for (let ustensil of recipe.ustensils) {
+						ustensilsOfRecipe.push(ustensil.toLowerCase())
+					}
+					if (recipe.name.toLowerCase().includes(mainInputValue) || recipe.appliance.toLowerCase().includes(mainInputValue) || ingredientsOfRecipe.includes(mainInputValue) || ustensilsOfRecipe.includes(mainInputValue) || recipe.description.toLowerCase().includes(mainInputValue)) {
+						return recipe
+					}
+				}
 				)
 			}
 		}
