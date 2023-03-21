@@ -12,7 +12,6 @@ let mainInput = document.getElementById('main-input')
 let ingredientsInput = document.getElementById('ingredients-input')
 let appliancesInput = document.getElementById('appareils-input')
 let ustensilsInput = document.getElementById('ustensiles-input')
-let filtersNames = []
 
 // Toggle filtersBtn
 for (let i = 0; i < filtersBtn.length; i++) {
@@ -46,7 +45,7 @@ searchUstensiles.addEventListener('submit', (e) => {
 // Search by name
 mainForm.addEventListener('submit', (e) => {
 	e.preventDefault()
-	search.sortRecipes(mainInput.value === '' ? 'reset' : mainInput.value.toLowerCase())
+	search.sortRecipes(mainInput.value === '' ? 'RESET' : mainInput.value.toLowerCase())
 })
 
 search.getAllIngredients()
@@ -56,30 +55,15 @@ search.getAllUstensils()
 // Search Filters
 ingredientsInput.addEventListener('input', () => {
 	search.searchFilters('ingredients', ingredientsInput.value.toLowerCase())
-	filtersNames = document.getElementsByClassName('filter-name')
-	for (let filterName of filtersNames) {
-		filterName.addEventListener('click', () => {
-			search.addFilterByClick(filterName.textContent, filterName.getAttribute('data-type'))
-		})
-	}
+	search.refreshListsOfFilters()
 })
 appliancesInput.addEventListener('input', () => {
 	search.searchFilters('appliances', appliancesInput.value.toLowerCase())
-	filtersNames = document.getElementsByClassName('filter-name')
-	for (let filterName of filtersNames) {
-		filterName.addEventListener('click', () => {
-			search.addFilterByClick(filterName.textContent, filterName.getAttribute('data-type'))
-		})
-	}
+	search.refreshListsOfFilters()
 })
 ustensilsInput.addEventListener('input', () => {
 	search.searchFilters('ustensils', ustensilsInput.value.toLowerCase())
-	filtersNames = document.getElementsByClassName('filter-name')
-	for (let filterName of filtersNames) {
-		filterName.addEventListener('click', () => {
-			search.addFilterByClick(filterName.textContent, filterName.getAttribute('data-type'))
-		})
-	}
+	search.refreshListsOfFilters()
 })
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -89,10 +73,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	search.displayAllUstensils()
 
 
-	filtersNames = document.getElementsByClassName('filter-name')
-	for (let filterName of filtersNames) {
-		filterName.addEventListener('click', () => {
-			search.addFilterByClick(filterName.textContent, filterName.getAttribute('data-type'))
-		})
-	}
+	search.refreshListsOfFilters()
 })

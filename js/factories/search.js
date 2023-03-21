@@ -18,6 +18,7 @@ export function searchFactory(recipes) {
 	let filteredIngredients = []
 	let filteredAppliances = []
 	let filteredUstenstils = []
+	let filtersNames = []
 
 	function addFilter(type, value) {
 		allFilters.push({ sortBy: type, value: value })
@@ -295,13 +296,23 @@ export function searchFactory(recipes) {
 		selectedFilters = document.getElementsByClassName('selected-filters__item')
 	}
 
+	function refreshListsOfFilters() {
+		filtersNames = document.getElementsByClassName('filter-name')
+		for (let filterName of filtersNames) {
+			filterName.addEventListener('click', () => {
+				addFilterByClick(filterName.textContent, filterName.getAttribute('data-type'))
+			})
+		}
+	}
+
 	function removeFilter(type, value) {
 		allFilters = allFilters.filter((filter) => {
 			return filter.type !== type && filter.value !== value
 		})
-		recipesToDisplay = recipes
-		sortRecipes()
+		// recipesToDisplay = recipes
 
+		
+		sortRecipes()
 		refreshSelectedFilters()
 	}
 
@@ -340,7 +351,7 @@ export function searchFactory(recipes) {
 			selectedFiltersSection.innerHTML = ''
 			refreshSelectedFilters()
 			recipesToDisplay = recipes
-			if (mainInputValue !== 'reset') {
+			if (mainInputValue !== 'RESET') {
 				recipesToDisplay = recipesToDisplay.filter((recipe) => {
 					let ingredientsOfRecipe = []
 					let ustensilsOfRecipe = []
@@ -351,6 +362,21 @@ export function searchFactory(recipes) {
 						ustensilsOfRecipe.push(ustensil.toLowerCase())
 					}
 					if (recipe.name.toLowerCase().includes(mainInputValue) || recipe.appliance.toLowerCase().includes(mainInputValue) || ingredientsOfRecipe.includes(mainInputValue) || ustensilsOfRecipe.includes(mainInputValue) || recipe.description.toLowerCase().includes(mainInputValue)) {
+						for (let item of ingredientsOfRecipe) {
+							if (!filteredIngredients.includes(item)) {
+								filteredIngredients.push(item)
+							}
+						}
+						for (let item of ustensilsOfRecipe) {
+							if (!filteredUstenstils.includes(item)) {
+								filteredUstenstils.push(item)
+							}
+						}
+						filteredAppliances.push(recipe.appliance.toLowerCase())
+						displayFilteredAppliances()
+						displayFilteredIngredients()
+						displayFilteredUstensils()
+						refreshListsOfFilters()
 						return recipe
 					}
 				}
@@ -417,5 +443,6 @@ export function searchFactory(recipes) {
 		displayFilteredUstensils,
 		searchFilters,
 		deleteFilterByClick,
+		refreshListsOfFilters,
 	}
 }
