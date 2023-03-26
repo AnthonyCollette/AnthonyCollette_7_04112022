@@ -19,6 +19,7 @@ export function searchFactory(recipes) {
 	let filteredAppliances = []
 	let filteredUstenstils = []
 	let filtersNames = []
+	let lastMainInputValue = ''
 
 	function addFilter(type, value) {
 		allFilters.push({ sortBy: type, value: value })
@@ -346,12 +347,13 @@ export function searchFactory(recipes) {
 	}
 
 	function sortRecipes(mainInputValue) {
-		if (mainInputValue) {
-			allFilters = []
+		if (mainInputValue && mainInputValue !== ' ') {
+			lastMainInputValue = mainInputValue
+			allFilters = [{sortBy: 'all', value: lastMainInputValue}]
 			selectedFiltersSection.innerHTML = ''
 			refreshSelectedFilters()
 			recipesToDisplay = recipes
-			if (mainInputValue !== 'RESET') {
+			if (lastMainInputValue !== 'RESET') {
 				recipesToDisplay = recipesToDisplay.filter((recipe) => {
 					let ingredientsOfRecipe = []
 					let ustensilsOfRecipe = []
@@ -361,7 +363,7 @@ export function searchFactory(recipes) {
 					for (let ustensil of recipe.ustensils) {
 						ustensilsOfRecipe.push(ustensil.toLowerCase())
 					}
-					if (recipe.name.toLowerCase().includes(mainInputValue) || recipe.appliance.toLowerCase().includes(mainInputValue) || ingredientsOfRecipe.includes(mainInputValue) || ustensilsOfRecipe.includes(mainInputValue) || recipe.description.toLowerCase().includes(mainInputValue)) {
+					if (recipe.name.toLowerCase().includes(lastMainInputValue) || recipe.appliance.toLowerCase().includes(lastMainInputValue) || ingredientsOfRecipe.includes(lastMainInputValue) || ustensilsOfRecipe.includes(mainInputValue) || recipe.description.toLowerCase().includes(mainInputValue)) {
 						for (let item of ingredientsOfRecipe) {
 							if (!filteredIngredients.includes(item)) {
 								filteredIngredients.push(item)
@@ -382,6 +384,9 @@ export function searchFactory(recipes) {
 				}
 				)
 			}
+		}
+		if (allFilters.filter(filter => filter.sortBy === 'all')) {
+			// Ajouter la recherche par filtres
 		}
 		for (let filter of allFilters) {
 			let filterSortBy = filter.sortBy
@@ -419,6 +424,7 @@ export function searchFactory(recipes) {
 					}
 				})
 			}
+
 		}
 		displayRecipes()
 	}
