@@ -16,9 +16,12 @@ let ustensilsInput = document.getElementById('ustensiles-input')
 // Toggle filtersBtn
 for (let i = 0; i < filtersBtn.length; i++) {
 	filtersBtn[i].addEventListener('click', () => {
-		filters[i].classList.contains('open')
-		? filters[i].classList.remove('open')
-			: filters[i].classList.add('open')
+		for (let filter of filters) {
+			if (filter !== filters[i]) {
+				filter.classList.remove('open')
+			}
+		}
+		filters[i].classList.contains('open') ? filters[i].classList.remove('open') : filters[i].classList.add('open')
 	})
 }
 

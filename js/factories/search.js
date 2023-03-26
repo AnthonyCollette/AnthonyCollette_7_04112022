@@ -37,7 +37,7 @@ export function searchFactory(recipes) {
                         </svg>
                     </article>
                     `
-                addFilter('ingredient', filter.toLowerCase())
+				addFilter('ingredient', filter.toLowerCase())
 				break
 
 			case 'appareil':
@@ -49,7 +49,7 @@ export function searchFactory(recipes) {
                         </svg>
                     </article>
                     `
-                addFilter('appareil', filter.toLowerCase())
+				addFilter('appareil', filter.toLowerCase())
 				break
 
 			case 'ustensile':
@@ -61,7 +61,7 @@ export function searchFactory(recipes) {
                         </svg>
                     </article>
                     `
-                addFilter('ustensile', filter.toLowerCase())
+				addFilter('ustensile', filter.toLowerCase())
 				break
 
 			default:
@@ -301,7 +301,10 @@ export function searchFactory(recipes) {
 		filtersNames = document.getElementsByClassName('filter-name')
 		for (let filterName of filtersNames) {
 			filterName.addEventListener('click', () => {
-				addFilterByClick(filterName.textContent, filterName.getAttribute('data-type'))
+				addFilterByClick(
+					filterName.textContent,
+					filterName.getAttribute('data-type')
+				)
 			})
 		}
 	}
@@ -310,9 +313,6 @@ export function searchFactory(recipes) {
 		allFilters = allFilters.filter((filter) => {
 			return filter.type !== type && filter.value !== value
 		})
-		// recipesToDisplay = recipes
-
-		
 		sortRecipes()
 		refreshSelectedFilters()
 	}
@@ -347,14 +347,18 @@ export function searchFactory(recipes) {
 	}
 
 	function sortRecipes(mainInputValue) {
-		if (mainInputValue && mainInputValue !== ' ') {
-			lastMainInputValue = mainInputValue
-			allFilters = [{sortBy: 'all', value: lastMainInputValue}]
+		if ((mainInputValue && mainInputValue !== ' ') || (lastMainInputValue != '' && allFilters.length === 1)) {
+			if (mainInputValue) {
+				lastMainInputValue = mainInputValue
+			}
+			if (allFilters.length === 0) {
+				allFilters.push({ sortBy: 'all', value: lastMainInputValue })
+			}
 			selectedFiltersSection.innerHTML = ''
 			refreshSelectedFilters()
 			recipesToDisplay = recipes
 			if (lastMainInputValue !== 'RESET') {
-				recipesToDisplay = recipesToDisplay.filter((recipe) => {
+				recipesToDisplay = recipes.filter((recipe) => {
 					let ingredientsOfRecipe = []
 					let ustensilsOfRecipe = []
 					for (let item of recipe.ingredients) {
@@ -363,7 +367,13 @@ export function searchFactory(recipes) {
 					for (let ustensil of recipe.ustensils) {
 						ustensilsOfRecipe.push(ustensil.toLowerCase())
 					}
-					if (recipe.name.toLowerCase().includes(lastMainInputValue) || recipe.appliance.toLowerCase().includes(lastMainInputValue) || ingredientsOfRecipe.includes(lastMainInputValue) || ustensilsOfRecipe.includes(mainInputValue) || recipe.description.toLowerCase().includes(mainInputValue)) {
+					if (
+						recipe.name.toLowerCase().includes(lastMainInputValue) ||
+						recipe.appliance.toLowerCase().includes(lastMainInputValue) ||
+						ingredientsOfRecipe.includes(lastMainInputValue) ||
+						ustensilsOfRecipe.includes(mainInputValue) ||
+						recipe.description.toLowerCase().includes(mainInputValue)
+					) {
 						for (let item of ingredientsOfRecipe) {
 							if (!filteredIngredients.includes(item)) {
 								filteredIngredients.push(item)
@@ -381,50 +391,115 @@ export function searchFactory(recipes) {
 						refreshListsOfFilters()
 						return recipe
 					}
+				})
+			}
+		} else if (allFilters.filter((filter) => filter.sortBy === 'all') && allFilters.length > 1) { 
+			recipesToDisplay = recipes.filter((recipe) => {
+				let ingredientsOfRecipe = []
+				let ustensilsOfRecipe = []
+				for (let item of recipe.ingredients) {
+					ingredientsOfRecipe.push(item.ingredient.toLowerCase())
 				}
-				)
-			}
-		}
-		if (allFilters.filter(filter => filter.sortBy === 'all')) {
-			// Ajouter la recherche par filtres
-		}
-		for (let filter of allFilters) {
-			let filterSortBy = filter.sortBy
-			let filterValue = filter.value
-
-			if (recipesToDisplay.length < 1) {
-				recipesToDisplay = recipes
-			}
-			if (filterSortBy === 'ingredient') {
-				recipesToDisplay = recipesToDisplay.filter((recipe) => {
-					let listOfIngredients = []
-					for (let list of recipe.ingredients) {
-						listOfIngredients.push(list.ingredient.toLowerCase())
-					}
-					for (let item of listOfIngredients) {
-						if (item.includes(filterValue)) {
-							return recipe
+				for (let ustensil of recipe.ustensils) {
+					ustensilsOfRecipe.push(ustensil.toLowerCase())
+				}
+				if (
+					recipe.name.toLowerCase().includes(lastMainInputValue) ||
+					recipe.appliance.toLowerCase().includes(lastMainInputValue) ||
+					ingredientsOfRecipe.includes(lastMainInputValue) ||
+					ustensilsOfRecipe.includes(mainInputValue) ||
+					recipe.description.toLowerCase().includes(mainInputValue)
+				) {
+					for (let item of ingredientsOfRecipe) {
+						if (!filteredIngredients.includes(item)) {
+							filteredIngredients.push(item)
 						}
 					}
-				})
-			}
-			if (filterSortBy === 'appareil') {
-				recipesToDisplay = recipesToDisplay.filter((recipe) => {
-					if (recipe.appliance.toLowerCase().includes(filterValue)) {
-						return recipe
-					}
-				})
-			}
-			if (filterSortBy === 'ustensile') {
-				recipesToDisplay = recipesToDisplay.filter((recipe) => {
-					for (let ustensil of recipe.ustensils) {
-						if (ustensil.includes(filterValue)) {
-							return recipe
+					for (let item of ustensilsOfRecipe) {
+						if (!filteredUstenstils.includes(item)) {
+							filteredUstenstils.push(item)
 						}
 					}
-				})
-			}
+					filteredAppliances.push(recipe.appliance.toLowerCase())
+					displayFilteredAppliances()
+					displayFilteredIngredients()
+					displayFilteredUstensils()
+					refreshListsOfFilters()
+					return recipe
+				}
+			})
+			for (let filter of allFilters) {
+				let filterSortBy = filter.sortBy
+				let filterValue = filter.value
 
+				if (filterSortBy === 'ingredient') {
+					recipesToDisplay = recipesToDisplay.filter((recipe) => {
+						let listOfIngredients = []
+						for (let list of recipe.ingredients) {
+							listOfIngredients.push(list.ingredient.toLowerCase())
+						}
+						for (let item of listOfIngredients) {
+							if (item.includes(filterValue)) {
+								return recipe
+							}
+						}
+					})
+				}
+				if (filterSortBy === 'appareil') {
+					recipesToDisplay = recipesToDisplay.filter((recipe) => {
+						if (recipe.appliance.toLowerCase().includes(filterValue)) {
+							return recipe
+						}
+					})
+				}
+				if (filterSortBy === 'ustensile') {
+					recipesToDisplay = recipesToDisplay.filter((recipe) => {
+						for (let ustensil of recipe.ustensils) {
+							if (ustensil.includes(filterValue)) {
+								return recipe
+							}
+						}
+					})
+				}
+			}
+		} else {
+			for (let filter of allFilters) {
+				let filterSortBy = filter.sortBy
+				let filterValue = filter.value
+
+				if (recipesToDisplay.length < 1) {
+					recipesToDisplay = recipes
+				}
+				if (filterSortBy === 'ingredient') {
+					recipesToDisplay = recipesToDisplay.filter((recipe) => {
+						let listOfIngredients = []
+						for (let list of recipe.ingredients) {
+							listOfIngredients.push(list.ingredient.toLowerCase())
+						}
+						for (let item of listOfIngredients) {
+							if (item.includes(filterValue)) {
+								return recipe
+							}
+						}
+					})
+				}
+				if (filterSortBy === 'appareil') {
+					recipesToDisplay = recipesToDisplay.filter((recipe) => {
+						if (recipe.appliance.toLowerCase().includes(filterValue)) {
+							return recipe
+						}
+					})
+				}
+				if (filterSortBy === 'ustensile') {
+					recipesToDisplay = recipesToDisplay.filter((recipe) => {
+						for (let ustensil of recipe.ustensils) {
+							if (ustensil.includes(filterValue)) {
+								return recipe
+							}
+						}
+					})
+				}
+			}
 		}
 		displayRecipes()
 	}
