@@ -347,7 +347,9 @@ export function searchFactory(recipes) {
 	}
 
 	function sortRecipes(mainInputValue) {
-		if ((mainInputValue && mainInputValue !== ' ') || (lastMainInputValue != '' && allFilters.length === 1)) {
+		
+		if ((mainInputValue && mainInputValue !== ' ') || (lastMainInputValue !== '' && allFilters.length === 1)) {
+			
 			if (mainInputValue) {
 				lastMainInputValue = mainInputValue
 			}
@@ -358,6 +360,7 @@ export function searchFactory(recipes) {
 			refreshSelectedFilters()
 			recipesToDisplay = recipes
 			if (lastMainInputValue !== 'RESET') {
+				console.log('ok')
 				recipesToDisplay = recipes.filter((recipe) => {
 					let ingredientsOfRecipe = []
 					let ustensilsOfRecipe = []
