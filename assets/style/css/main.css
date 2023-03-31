@@ -76,12 +76,20 @@ main {
 
 @font-face {
   font-family: "Lato Regular";
-  src: url("../assets/fonts/Lato/Lato-Regular.ttf") format("truetype");
+  src: url("../../fonts/Lato/Lato-Regular.ttf") format("truetype");
 }
 @font-face {
   font-family: "Roboto Regular";
-  src: url("../assets/fonts/Roboto/Roboto-Regular.ttf") format("truetype");
+  src: url("../../fonts/Roboto/Roboto-Regular.ttf") format("truetype");
 }
+h1 {
+  font-size: 24px;
+  font-weight: 600;
+  font-family: "Lato Regular";
+  margin: 80px auto 50px;
+  text-align: center;
+}
+
 h2 {
   font-size: 18px;
 }
@@ -122,7 +130,6 @@ input[type=text] {
 }
 .filter__header--input-wrapper {
   position: relative;
-  height: -moz-fit-content;
   height: fit-content;
 }
 .filter__header input[type=text] {
@@ -133,9 +140,6 @@ input[type=text] {
 }
 .filter__header input[type=text]:focus, .filter__header input[type=text]:active, .filter__header input[type=text]:focus-visible {
   outline: none;
-}
-.filter__header input[type=text]::-moz-placeholder {
-  color: #fff;
 }
 .filter__header input[type=text]::placeholder {
   color: #fff;
@@ -240,6 +244,7 @@ input[type=text] {
   animation: fadeIn 0.4s forwards;
   cursor: pointer;
   margin-right: 15px;
+  margin-bottom: 15px;
 }
 .selected-filters__item--blue {
   border: 1px solid #3282F7;
@@ -307,8 +312,7 @@ input[type=text] {
 .result__img-wrapper img {
   width: 100%;
   height: 100%;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 .result__header {
   display: flex;
@@ -366,4 +370,4 @@ main .main-input svg {
   flex-wrap: wrap;
   align-items: stretch;
   margin: 0 -25px;
-}
+}/*# sourceMappingURL=main.css.map */
