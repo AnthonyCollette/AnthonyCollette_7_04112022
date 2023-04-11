@@ -7,9 +7,14 @@ export function searchFactory(recipes) {
 	let selectedFiltersSection = document.getElementById('selected-filters')
 	let filtersDiv = []
 	let filters = []
+	let newFilters = []
 	let tags = []
+	let appliancesList = []
+	let newAppliancesList = []
 	let ingredientsList = []
 	let newIngredientsList = []
+	let ustensilsList = []
+	let newUstensilsList = []
 
 
 	function sortRecipes(data, dataType) {
@@ -26,7 +31,6 @@ export function searchFactory(recipes) {
 				filters.push({ data, dataType })
 			}
 		}
-
 		switch (dataType) {
 			case 'input':
 				filteredRecipes = []
@@ -50,7 +54,6 @@ export function searchFactory(recipes) {
 						}
 					}
 				}
-
 				break;
 
 			case 'ingredient':
@@ -112,6 +115,21 @@ export function searchFactory(recipes) {
 		displayFilters(filteredRecipes)
 	}
 
+	function sortRecipesAfterDelete(data, dataType) {
+		newFilters = []
+		filteredRecipes = recipes
+		for (let filter of filters) {
+			if ((filter.data !== data || filter.dataType !== dataType) && !newFilters.includes(filter)) {
+				newFilters.push(filter)
+			}
+		}
+		filters = newFilters
+		console.log(filters)
+		for (let filter of newFilters) {
+			sortRecipes(filter.data, filter.dataType)
+		}
+	}
+
 	function addTag() {
 		filtersDiv = document.getElementsByClassName('filter-name')
 		for (let filter of filtersDiv) {
@@ -164,7 +182,7 @@ export function searchFactory(recipes) {
 				}
 				tags = document.getElementsByClassName('selected-filters__item')
 				sortRecipes(filterText, filterAttribute)
-				deleteTag()
+				deleteTag(filterText, filterAttribute)
 			})
 		}
 	}
@@ -172,37 +190,68 @@ export function searchFactory(recipes) {
 	function deleteTag() {
 		for (let tag of tags) {
 			tag.addEventListener('click', (e) => {
+				sortRecipesAfterDelete(tag.innerText, tag.getAttribute('data-type'))
 				tag.remove()
 				tags = document.getElementsByClassName('selected-filters__item')
+				
 			})
 		}
 	}
 
 	function displayFilters(filteredRecipes, value, type) {
-		// Affichage des appareils
+
+		ingredientsListDiv.innerHTML = ''
 		appliancesListDiv.innerHTML = ''
-		let appliancesList = []
-		for (let recipe of filteredRecipes) {
-			if (!appliancesList.includes(recipe.appliance.toLowerCase())) {
-				appliancesList.push(recipe.appliance.toLowerCase())
+		ustensilsListDiv.innerHTML = ''
+		ingredientsList = []
+		appliancesList = []
+		ustensilsList = []
+		if (filters.length > 0) {
+			for (let recipe of filteredRecipes) {
+				for (let ingredient of recipe.ingredients) {
+					if (!ingredientsList.includes(ingredient.ingredient.toLowerCase())) {
+						ingredientsList.push(ingredient.ingredient.toLowerCase())
+					}
+				}
+				if (!appliancesList.includes(recipe.appliance.toLowerCase())) {
+					appliancesList.push(recipe.appliance.toLowerCase())
+				}
+				for (let ustensil of recipe.ustensils) {
+					if (!ustensilsList.includes(ustensil.toLowerCase())) {
+						ustensilsList.push(ustensil.toLowerCase())
+					}
+				}
+			}
+		} else {
+			for (let recipe of recipes) {
+				for (let ingredient of recipe.ingredients) {
+					if (!ingredientsList.includes(ingredient.ingredient.toLowerCase())) {
+						ingredientsList.push(ingredient.ingredient.toLowerCase())
+					}
+				}
+				if (!appliancesList.includes(recipe.appliance.toLowerCase())) {
+					appliancesList.push(recipe.appliance.toLowerCase())
+				}
+				for (let ustensil of recipe.ustensils) {
+					if (!ustensilsList.includes(ustensil.toLowerCase())) {
+						ustensilsList.push(ustensil.toLowerCase())
+					}
+				}
 			}
 		}
+
+		for (let ingredient of ingredientsList) {
+			ingredientsListDiv.innerHTML += `
+				<li data-type="ingredient" class="filter-name">${ingredient}</li>
+			`
+		}
+
 		for (let appliance of appliancesList) {
 			appliancesListDiv.innerHTML += `
 				<li data-type="appareil" class="filter-name">${appliance}</li>
 			`
 		}
 
-		// Affichage des ustensiles
-		ustensilsListDiv.innerHTML = ''
-		let ustensilsList = []
-		for (let recipe of filteredRecipes) {
-			for (let ustensil of recipe.ustensils) {
-				if (!ustensilsList.includes(ustensil.toLowerCase())) {
-					ustensilsList.push(ustensil.toLowerCase())
-				}
-			}
-		}
 		for (let ustensil of ustensilsList) {
 			ustensilsListDiv.innerHTML += `
 				<li data-type="ustensile" class="filter-name">${ustensil}</li>
@@ -212,66 +261,55 @@ export function searchFactory(recipes) {
 		if (value && type) {
 			switch (type) {
 
-				// A DEBUGGER
 				case 'ingredient':
-					ingredientsList = []
-					if (filters.length > 0) {
-						for (let recipe of filteredRecipes) {
-							for (let ingredient of recipe.ingredients) {
-								if (!ingredientsList.includes(ingredient.ingredient.toLowerCase())) {
-									ingredientsList.push(ingredient.ingredient.toLowerCase())
-								}
-							}
-						}
-					} else {
-						for (let recipe of recipes) {
-							for (let ingredient of recipe.ingredients) {
-								if (!ingredientsList.includes(ingredient.ingredient.toLowerCase())) {
-									ingredientsList.push(ingredient.ingredient.toLowerCase())
-								}
-							}
-						}
-					}
-
+					newIngredientsList = []
 					ingredientsListDiv.innerHTML = ''
 					for (let ingredient of ingredientsList) {
-						if (ingredient.toLowerCase().includes(value.toLowerCase())) {
-							if (!newIngredientsList.includes(ingredient.toLowerCase())) {
-								newIngredientsList.push(ingredient.toLowerCase())
-							}
+						if (ingredient.includes(value.toLowerCase()) && !newIngredientsList.includes(ingredient)) {
+							newIngredientsList.push(ingredient)
 						}
 					}
 					for (let ingredient of newIngredientsList) {
 						ingredientsListDiv.innerHTML += `
-							<li data-type="ingredient" class="filter-name">${ingredient}</li>
-						`
+					<li data-type="ingredient" class="filter-name">${ingredient}</li>
+				`
 					}
 					break;
+				
+				case 'appliance':
+					appliancesListDiv.innerHTML = ''
+					newAppliancesList = []
+					for (let appliance of appliancesList) {
+						if (appliance.includes(value.toLowerCase()) && !newAppliancesList.includes(appliance)) {
+							newAppliancesList.push(appliance)
+						}
+					}
+					for (let appliance of newAppliancesList) {
+						appliancesListDiv.innerHTML += `
+						<li data-type="appareil" class="filter-name">${appliance}</li>
+					`
+					}
+					break;
+
+				case 'ustensil':
+					ustensilsListDiv.innerHTML = ''
+					newUstensilsList = []
+					for (let ustensil of ustensilsList) {
+						if (ustensil.includes(value.toLowerCase()) && !newUstensilsList.includes(ustensil)) {
+							newUstensilsList.push(ustensil)
+						}
+					}
+					for (let ustensil of newUstensilsList) {
+						ustensilsListDiv.innerHTML += `
+							<li data-type="ustensile" class="filter-name">${ustensil}</li>
+						`
+					}
+
 
 				default:
 					break;
 			}
-		} else {
-
-			// Affichage des ingrédients
-			ingredientsListDiv.innerHTML = ''
-			ingredientsList = []
-
-			for (let recipe of filteredRecipes) {
-				for (let ingredient of recipe.ingredients) {
-					if (!ingredientsList.includes(ingredient.ingredient.toLowerCase())) {
-						ingredientsList.push(ingredient.ingredient.toLowerCase())
-					}
-				}
-			}
-
-			for (let ingredient of ingredientsList) {
-				ingredientsListDiv.innerHTML += `
-				<li data-type="ingredient" class="filter-name">${ingredient}</li>
-			`
-			}
 		}
-
 
 		addTag()
 	}

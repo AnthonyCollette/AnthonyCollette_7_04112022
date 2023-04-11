@@ -6,6 +6,8 @@ let filters = document.getElementsByClassName('filter')
 let filtersBtn = document.getElementsByClassName('filters-btn')
 let mainSearchInput = document.getElementById('main-search-input')
 let ingredientsInput = document.getElementById('ingredients-input')
+let appliancesInput = document.getElementById('appareils-input')
+let ustensilsInput = document.getElementById('ustensiles-input')
 
 
 // Toggle filtersBtn
@@ -33,4 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ingredientsInput.addEventListener('input', (e) => {
 	search.displayFilters(search.filteredRecipes, e.target.value, 'ingredient')
+})
+appliancesInput.addEventListener('input', (e) => {
+	search.displayFilters(search.filteredRecipes, e.target.value, 'appliance')
+})
+ustensilsInput.addEventListener('input', (e) => {
+	search.displayFilters(search.filteredRecipes, e.target.value, 'ustensil')
 })
