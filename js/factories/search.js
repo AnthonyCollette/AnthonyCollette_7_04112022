@@ -20,91 +20,88 @@ export function searchFactory(recipes) {
 
 	function sortRecipes(data) {
 		if (data) {
+			const filteringFilters = filters.filter((item) => item.dataType !== 'input')
+			filters = filteringFilters
 			if (data.length > 2) {
-				for (let filter of filters) {
-					if (filter.dataType === 'input') {
-						const index = filters.indexOf(filter)
-						filters.splice(index, 1)
-					}
-				}
 				filters.push({ data: data.toLowerCase(), dataType: 'input' })
 			} else {
-				for (let filter of filters) {
-					if (filter.dataType === 'input') {
-						const index = filters.indexOf(filter)
-						filters.splice(index, 1)
-					}
-				}
 				filteredRecipes = recipes
 			}
 		}
 		if (filteredRecipes.length <= 0) {
-			for (let recipe of recipes) {
-				for (let filter of filters) {
-					let ingredientsOfRecipe = [recipe.ingredients]
-					let ustensilsOfRecipe = [recipe.ustensils]
-					let applianceOfRecipe = recipe.appliance
+			recipes.map((recipe) => {
+				let ingredientsOfRecipe = [recipe.ingredients]
+				let ustensilsOfRecipe = [recipe.ustensils]
+				let applianceOfRecipe = recipe.appliance
 
-					if (filter.dataType === 'input') {
-						// FILTER BY INGREDIENT
-						for (let ingredient of ingredientsOfRecipe[0]) {
-							if (ingredient.ingredient.toLowerCase().includes(filter.data) && !filteredRecipes.includes(recipe)) {
+				filters.forEach(filter => {
+					let data = filter.data
+					let dataType = filter.dataType
+
+					switch (dataType) {
+						case 'input':
+							// FILTER BY INGREDIENT
+							for (let ingredient of ingredientsOfRecipe[0]) {
+								if (ingredient.ingredient.toLowerCase().includes(data) && !filteredRecipes.includes(recipe)) {
+									filteredRecipes.push(recipe)
+								}
+							}
+
+							// FILTER BY USTENSIL
+							for (let ustensile of ustensilsOfRecipe[0]) {
+								if (ustensile.toLowerCase().includes(data) && !filteredRecipes.includes(recipe)) {
+									filteredRecipes.push(recipe)
+								}
+							}
+
+							// FILTER BY APPLIANCE
+							if (applianceOfRecipe.toLowerCase().includes(data) && !filteredRecipes.includes(recipe)) {
 								filteredRecipes.push(recipe)
 							}
-						}
 
-						// FILTER BY USTENSIL
-						for (let ustensile of ustensilsOfRecipe[0]) {
-							if (ustensile.toLowerCase().includes(filter.data) && !filteredRecipes.includes(recipe)) {
+							// FILTER BY DESCRIPTION
+							if (recipe.description.toLowerCase().includes(data) && !filteredRecipes.includes(recipe)) {
 								filteredRecipes.push(recipe)
 							}
-						}
 
-						// FILTER BY APPLIANCE
-						if (applianceOfRecipe.toLowerCase().includes(filter.data) && !filteredRecipes.includes(recipe)) {
-							filteredRecipes.push(recipe)
-						}
-
-						// FILTER BY DESCRIPTION
-						if (recipe.description.toLowerCase().includes(filter.data) && !filteredRecipes.includes(recipe)) {
-							filteredRecipes.push(recipe)
-						}
-
-						// FILTER BY NAME
-						if (recipe.name.toLowerCase().includes(filter.data) && !filteredRecipes.includes(recipe)) {
-							filteredRecipes.push(recipe)
-						}
-					}
-					if (filter.dataType === 'ingredient') {
-						for (let ingredient of ingredientsOfRecipe[0]) {
-							if (ingredient.ingredient.toLowerCase().includes(filter.data) && !filteredRecipes.includes(recipe)) {
+							// FILTER BY NAME
+							if (recipe.name.toLowerCase().includes(data) && !filteredRecipes.includes(recipe)) {
 								filteredRecipes.push(recipe)
 							}
-						}
-					}
-					if (filter.dataType === 'ustensile') {
-						for (let ustensile of ustensilsOfRecipe[0]) {
-							if (ustensile.toLowerCase().includes(filter.data) && !filteredRecipes.includes(recipe)) {
+							break;
+						case 'ingredient':
+							for (let ingredient of ingredientsOfRecipe[0]) {
+								if (ingredient.ingredient.toLowerCase().includes(filter.data) && !filteredRecipes.includes(recipe)) {
+									filteredRecipes.push(recipe)
+								}
+							}
+							break;
+						case 'ustensile':
+							for (let ustensile of ustensilsOfRecipe[0]) {
+								if (ustensile.toLowerCase().includes(filter.data) && !filteredRecipes.includes(recipe)) {
+									filteredRecipes.push(recipe)
+								}
+							}
+							break;
+						case 'appareil':
+							if (applianceOfRecipe.toLowerCase().includes(filter.data) && !filteredRecipes.includes(recipe)) {
 								filteredRecipes.push(recipe)
 							}
-						}
+							break;
+						default:
+							break;
 					}
-					if (filter.dataType === 'appareil') {
-						if (applianceOfRecipe.toLowerCase().includes(filter.data) && !filteredRecipes.includes(recipe)) {
-							filteredRecipes.push(recipe)
-						}
-					}
-				}
+				})
 			}
+			)
 		} else {
-			for (let recipe of filteredRecipes) {
-				let recipeMatch = true
+			filteredRecipes.filter((recipe) => {
 				let ingredientsMatch = true
 				let applianceMatch = true
 				let ustensilsMatch = true
 				let inputMatch = true
 
-				for (let filter of filters) {
+				filters.forEach((filter) => {
 					let ingredientsOfRecipe = [recipe.ingredients]
 					let ustensilsOfRecipe = [recipe.ustensils]
 					let applianceOfRecipe = recipe.appliance
@@ -114,18 +111,18 @@ export function searchFactory(recipes) {
 							inputMatch = false
 
 							// FILTER BY INGREDIENT
-							for (let ingredient of ingredientsOfRecipe[0]) {
+							ingredientsOfRecipe[0].forEach((ingredient) => {
 								if (ingredient.ingredient.toLowerCase().includes(filter.data)) {
 									inputMatch = true
 								}
-							}
+							})
 
 							// FILTER BY USTENSIL
-							for (let ustensile of ustensilsOfRecipe[0]) {
+							ustensilsOfRecipe[0].forEach((ustensile) => {
 								if (ustensile.toLowerCase().includes(filter.data)) {
 									inputMatch = true
 								}
-							}
+							})
 
 							// FILTER BY APPLIANCE
 							if (applianceOfRecipe.toLowerCase().includes(filter.data)) {
@@ -144,19 +141,19 @@ export function searchFactory(recipes) {
 							break;
 						case 'ingredient':
 							ingredientsMatch = false
-							for (let ingredient of ingredientsOfRecipe[0]) {
+							ingredientsOfRecipe[0].forEach((ingredient) => {
 								if (ingredient.ingredient.toLowerCase().includes(filter.data)) {
 									ingredientsMatch = true
 								}
-							}
+							})
 							break;
 						case 'ustensile':
 							ustensilsMatch = false
-							for (let ustensile of ustensilsOfRecipe[0]) {
+							ustensilsOfRecipe[0].forEach((ustensile) => {
 								if (ustensile.toLowerCase().includes(filter.data)) {
 									ustensilsMatch = true
 								}
-							}
+							})
 							break;
 						case 'appareil':
 							applianceMatch = false
@@ -167,18 +164,14 @@ export function searchFactory(recipes) {
 						default:
 							break;
 					}
-				}
 
+				})
 				if (!ingredientsMatch || !applianceMatch || !ustensilsMatch || !inputMatch) {
-					recipeMatch = false
+					return recipe
 				}
-
-				if (recipeMatch && !newFilteredRecipes.includes(recipe)) {
-					newFilteredRecipes.push(recipe)
-				}
-			}
-			filteredRecipes = newFilteredRecipes
-			newFilteredRecipes = []
+			})
+			// filteredRecipes = newFilteredRecipes
+			// newFilteredRecipes = []
 		}
 
 		displayRecipes(filteredRecipes)
