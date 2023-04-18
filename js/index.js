@@ -24,9 +24,7 @@ for (let i = 0; i < filtersBtn.length; i++) {
 
 mainSearchInput.addEventListener('input', (e) => {
 	let numberOfCaracters = e.target.value.length
-	if (numberOfCaracters > 2) {
-		search.sortRecipes(e.target.value, 'input')
-	}
+	search.sortRecipes(e.target.value)
 })
 
 document.addEventListener('DOMContentLoaded', () => {
