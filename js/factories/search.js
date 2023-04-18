@@ -35,6 +35,7 @@ export function searchFactory(recipes) {
 						filters.splice(index, 1)
 					}
 				}
+				filteredRecipes = recipes
 			}
 		}
 		if (filteredRecipes.length <= 0) {
@@ -179,6 +180,7 @@ export function searchFactory(recipes) {
 			filteredRecipes = newFilteredRecipes
 			newFilteredRecipes = []
 		}
+
 		displayRecipes(filteredRecipes)
 		displayFilters(filteredRecipes)
 	}
@@ -319,6 +321,11 @@ export function searchFactory(recipes) {
 				}
 			}
 		}
+
+		// TRI PAR ORDRE ALPHABETIQUE
+		ingredientsList.sort()
+		appliancesList.sort()
+		ustensilsList.sort()
 
 		for (let ingredient of ingredientsList) {
 			ingredientsListDiv.innerHTML += `

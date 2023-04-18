@@ -23,7 +23,6 @@ for (let i = 0; i < filtersBtn.length; i++) {
 }
 
 mainSearchInput.addEventListener('input', (e) => {
-	let numberOfCaracters = e.target.value.length
 	search.sortRecipes(e.target.value)
 })
 
