@@ -30,8 +30,8 @@ export function searchFactory(recipes) {
 		}
 		if (filteredRecipes.length <= 0) {
 			recipes.map((recipe) => {
-				let ingredientsOfRecipe = [recipe.ingredients]
-				let ustensilsOfRecipe = [recipe.ustensils]
+				let ingredientsOfRecipe = recipe.ingredients
+				let ustensilsOfRecipe = recipe.ustensils
 				let applianceOfRecipe = recipe.appliance
 
 				filters.forEach(filter => {
@@ -41,14 +41,14 @@ export function searchFactory(recipes) {
 					switch (dataType) {
 						case 'input':
 							// FILTER BY INGREDIENT
-							for (let ingredient of ingredientsOfRecipe[0]) {
+							for (let ingredient of ingredientsOfRecipe) {
 								if (ingredient.ingredient.toLowerCase().includes(data) && !filteredRecipes.includes(recipe)) {
 									filteredRecipes.push(recipe)
 								}
 							}
 
 							// FILTER BY USTENSIL
-							for (let ustensile of ustensilsOfRecipe[0]) {
+							for (let ustensile of ustensilsOfRecipe) {
 								if (ustensile.toLowerCase().includes(data) && !filteredRecipes.includes(recipe)) {
 									filteredRecipes.push(recipe)
 								}
@@ -70,14 +70,14 @@ export function searchFactory(recipes) {
 							}
 							break;
 						case 'ingredient':
-							for (let ingredient of ingredientsOfRecipe[0]) {
+							for (let ingredient of ingredientsOfRecipe) {
 								if (ingredient.ingredient.toLowerCase().includes(filter.data) && !filteredRecipes.includes(recipe)) {
 									filteredRecipes.push(recipe)
 								}
 							}
 							break;
 						case 'ustensile':
-							for (let ustensile of ustensilsOfRecipe[0]) {
+							for (let ustensile of ustensilsOfRecipe) {
 								if (ustensile.toLowerCase().includes(filter.data) && !filteredRecipes.includes(recipe)) {
 									filteredRecipes.push(recipe)
 								}
@@ -102,8 +102,8 @@ export function searchFactory(recipes) {
 				let inputMatch = true
 
 				filters.forEach((filter) => {
-					let ingredientsOfRecipe = [recipe.ingredients]
-					let ustensilsOfRecipe = [recipe.ustensils]
+					let ingredientsOfRecipe = recipe.ingredients
+					let ustensilsOfRecipe = recipe.ustensils
 					let applianceOfRecipe = recipe.appliance
 
 					switch (filter.dataType) {
@@ -111,14 +111,14 @@ export function searchFactory(recipes) {
 							inputMatch = false
 
 							// FILTER BY INGREDIENT
-							ingredientsOfRecipe[0].forEach((ingredient) => {
+							ingredientsOfRecipe.forEach((ingredient) => {
 								if (ingredient.ingredient.toLowerCase().includes(filter.data)) {
 									inputMatch = true
 								}
 							})
 
 							// FILTER BY USTENSIL
-							ustensilsOfRecipe[0].forEach((ustensile) => {
+							ustensilsOfRecipe.forEach((ustensile) => {
 								if (ustensile.toLowerCase().includes(filter.data)) {
 									inputMatch = true
 								}
@@ -141,7 +141,7 @@ export function searchFactory(recipes) {
 							break;
 						case 'ingredient':
 							ingredientsMatch = false
-							ingredientsOfRecipe[0].forEach((ingredient) => {
+							ingredientsOfRecipe.forEach((ingredient) => {
 								if (ingredient.ingredient.toLowerCase().includes(filter.data)) {
 									ingredientsMatch = true
 								}
@@ -149,7 +149,7 @@ export function searchFactory(recipes) {
 							break;
 						case 'ustensile':
 							ustensilsMatch = false
-							ustensilsOfRecipe[0].forEach((ustensile) => {
+							ustensilsOfRecipe.forEach((ustensile) => {
 								if (ustensile.toLowerCase().includes(filter.data)) {
 									ustensilsMatch = true
 								}
@@ -166,12 +166,13 @@ export function searchFactory(recipes) {
 					}
 
 				})
-				if (!ingredientsMatch || !applianceMatch || !ustensilsMatch || !inputMatch) {
+				if (ingredientsMatch && applianceMatch && ustensilsMatch && inputMatch) {
 					return recipe
 				}
 			})
-			// filteredRecipes = newFilteredRecipes
-			// newFilteredRecipes = []
+			filteredRecipes = newFilteredRecipes
+			newFilteredRecipes = []
+			console.log(filters)
 		}
 
 		displayRecipes(filteredRecipes)
