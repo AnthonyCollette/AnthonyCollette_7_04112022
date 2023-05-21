@@ -95,84 +95,118 @@ export function searchFactory(recipes) {
 			}
 			)
 		} else {
-			filteredRecipes.filter((recipe) => {
-				let ingredientsMatch = true
-				let applianceMatch = true
-				let ustensilsMatch = true
-				let inputMatch = true
-
-				filters.forEach((filter) => {
-					let ingredientsOfRecipe = recipe.ingredients
-					let ustensilsOfRecipe = recipe.ustensils
-					let applianceOfRecipe = recipe.appliance
-
-					switch (filter.dataType) {
-						case 'input':
-							inputMatch = false
-
-							// FILTER BY INGREDIENT
-							ingredientsOfRecipe.forEach((ingredient) => {
-								if (ingredient.ingredient.toLowerCase().includes(filter.data)) {
-									inputMatch = true
+			filters.forEach((filter) => {
+				switch (filter.dataType) {
+					case 'input':
+						newFilteredRecipes = recipes.filter((recipe) => {
+							let lowerCasedIngredients = []
+							let ingredientsMatch = false
+							recipe.ingredients.forEach(list => lowerCasedIngredients.push(list.ingredient.toLowerCase()))
+							lowerCasedIngredients.forEach(ingredient => {
+								if (ingredient.includes(filter.data)) {
+									return ingredientsMatch = true
 								}
 							})
+							return recipe.name.toLowerCase().includes(filter.data) || recipe.description.toLowerCase().includes(filter.data) || ingredientsMatch
+						})
+						break;
+					case 'ingredient':
+						newFilteredRecipes = filteredRecipes.filter((recipe) => {
 
-							// FILTER BY USTENSIL
-							ustensilsOfRecipe.forEach((ustensile) => {
-								if (ustensile.toLowerCase().includes(filter.data)) {
-									inputMatch = true
+							let ingredientsFiltered = recipe.ingredients
+							let ingredientsLowerCased = []
+							let ingredientMatch = false
+
+							recipe.ingredients.forEach(ingredient => ingredientsLowerCased.push(ingredient.ingredient.toLowerCase()))
+							ingredientsFiltered.forEach((ingredient) => {
+								let filteredIngredient = ingredient.ingredient.toLowerCase()
+								if (filter.data.includes(filteredIngredient)) {
+									return ingredientMatch = true
 								}
 							})
-
-							// FILTER BY APPLIANCE
-							if (applianceOfRecipe.toLowerCase().includes(filter.data)) {
-								inputMatch = true
-							}
-
-							// FILTER BY DESCRIPTION
-							if (recipe.description.toLowerCase().includes(filter.data)) {
-								inputMatch = true
-							}
-
-							// FILTER BY NAME
-							if (recipe.name.toLowerCase().includes(filter.data)) {
-								inputMatch = true
-							}
-							break;
-						case 'ingredient':
-							ingredientsMatch = false
-							ingredientsOfRecipe.forEach((ingredient) => {
-								if (ingredient.ingredient.toLowerCase().includes(filter.data)) {
-									ingredientsMatch = true
-								}
-							})
-							break;
-						case 'ustensile':
-							ustensilsMatch = false
-							ustensilsOfRecipe.forEach((ustensile) => {
-								if (ustensile.toLowerCase().includes(filter.data)) {
-									ustensilsMatch = true
-								}
-							})
-							break;
-						case 'appareil':
-							applianceMatch = false
-							if (applianceOfRecipe.toLowerCase().includes(filter.data)) {
-								applianceMatch = true
-							}
-							break;
-						default:
-							break;
-					}
-
-				})
-				if (ingredientsMatch && applianceMatch && ustensilsMatch && inputMatch) {
-					return recipe
+							return ingredientMatch
+						})
+						break;
 				}
 			})
+			// filteredRecipes.filter((recipe) => {
+				// let ingredientsMatch = true
+				// let applianceMatch = true
+				// let ustensilsMatch = true
+				// let inputMatch = true
+
+				// filters.forEach((filter) => {
+				// 	let ingredientsOfRecipe = recipe.ingredients
+				// 	let ustensilsOfRecipe = recipe.ustensils
+				// 	let applianceOfRecipe = recipe.appliance
+					
+				// 	switch (filter.dataType) {
+				// 		case 'input':
+				// 			inputMatch = false
+
+				// 			// FILTER BY INGREDIENT
+				// 			ingredientsOfRecipe.forEach((ingredient) => {
+				// 				if (ingredient.ingredient.toLowerCase().includes(filter.data)) {
+				// 					inputMatch = true
+				// 				}
+				// 			})
+
+				// 			// FILTER BY USTENSIL
+				// 			ustensilsOfRecipe.forEach((ustensile) => {
+				// 				if (ustensile.toLowerCase().includes(filter.data)) {
+				// 					inputMatch = true
+				// 				}
+				// 			})
+
+				// 			// FILTER BY APPLIANCE
+				// 			if (applianceOfRecipe.toLowerCase().includes(filter.data)) {
+				// 				inputMatch = true
+				// 			}
+
+				// 			// FILTER BY DESCRIPTION
+				// 			if (recipe.description.toLowerCase().includes(filter.data)) {
+				// 				inputMatch = true
+				// 			}
+
+				// 			// FILTER BY NAME
+				// 			if (recipe.name.toLowerCase().includes(filter.data)) {
+				// 				inputMatch = true
+				// 			}
+				// 			break;
+				// 		case 'ingredient':
+				// 			ingredientsMatch = false
+				// 			ingredientsOfRecipe.forEach((ingredient) => {
+				// 				if (ingredient.ingredient.toLowerCase().includes(filter.data)) {
+				// 					ingredientsMatch = true
+				// 				}
+				// 			})
+				// 			break;
+				// 		case 'ustensile':
+				// 			ustensilsMatch = false
+				// 			ustensilsOfRecipe.forEach((ustensile) => {
+				// 				if (ustensile.toLowerCase().includes(filter.data)) {
+				// 					ustensilsMatch = true
+				// 				}
+				// 			})
+				// 			break;
+				// 		case 'appareil':
+				// 			applianceMatch = false
+				// 			if (applianceOfRecipe.toLowerCase().includes(filter.data)) {
+				// 				applianceMatch = true
+				// 			}
+				// 			break;
+				// 		default:
+				// 			break;
+				// 	}
+
+				// })
+				// if (ingredientsMatch && applianceMatch && ustensilsMatch && inputMatch) {
+				// 	return recipe
+				// }
+			// })
 			filteredRecipes = newFilteredRecipes
 			newFilteredRecipes = []
-			console.log(filters)
+
 		}
 
 		displayRecipes(filteredRecipes)
